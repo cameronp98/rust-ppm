@@ -2,7 +2,18 @@ use std::fs::File;
 use std::io;
 use std::io::Write;
 
-pub const RGB_MAX: u8 = 255;
+pub const RGB_MAX: f32 = 255.0;
+
+/// Convert RGB f32 [0.0, 1.0] to u8 [0, 255]
+pub fn f32_to_u8(f: f32) -> u8 {
+    assert!(f <= 1.0);
+    (f * RGB_MAX as f32) as u8
+}
+
+/// Convert RGB u8 [0, 255] to f32 [0.0, 1.0]
+pub fn u8_to_f32(u: u8) -> f32 {
+    u as f32 / RGB_MAX as f32 
+}
 
 /// Rgb
 #[derive(Debug, Clone)]
@@ -20,9 +31,9 @@ impl Rgb {
 
     fn as_bytes(&self) -> (u8, u8, u8) {
         (
-            (self.r * RGB_MAX as f32) as u8,
-            (self.g * RGB_MAX as f32) as u8,
-            (self.b * RGB_MAX as f32) as u8,
+            f32_to_u8(self.r),
+            f32_to_u8(self.g),
+            f32_to_u8(self.b),
         )
     }
 
@@ -92,7 +103,7 @@ impl Ppm {
         // Write PPM header for RGB with dimensions and max pixel value
         writeln!(file, "P3")?;
         writeln!(file, "{} {}", self.height, self.width)?;
-        writeln!(file, "{}", RGB_MAX)?;
+        writeln!(file, "{}", RGB_MAX as u8)?;
 
         // Write the each pixel row by row
         for y in 0..self.height {
