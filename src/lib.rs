@@ -69,13 +69,23 @@ impl Rgb {
 /// 
 #[derive(Debug, Clone)]
 pub struct Ppm {
+    /// The image pixels stored contiguously
     pixels: Vec<Rgb>,
+    /// The image width in pixels (or the number of rows)
     pub width: usize,
+    /// The image height in pixels (or the number of columns)
     pub height: usize,
 }
 
 impl Ppm {
     /// Create a new PPM image with a width and height
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// let ppm = Ppm::new(32, 32);
+    /// ppm.save("image.ppm");
+    /// ```
     pub fn new(width: usize, height: usize) -> Ppm {
         assert!(width != 0 && height != 0);
 
@@ -96,18 +106,44 @@ impl Ppm {
     }
 
     /// Retrieve the pixel at coordinates `(x, y)`
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// let ppm = Ppm::new(32, 32);
+    /// println!("{:?}", ppm.get(20, 20).unwrap());
+    /// ```
     #[inline]
     pub fn get(&self, x: usize, y: usize) -> Option<&Rgb> {
         self.index(x, y).map(|i| &self.pixels[i])
     }
 
     /// Retrieve a mutable reference to the pixel at coordinates `(x, y)`
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// let ppm = Ppm::new(32, 32);
+    /// // Change a whole pixel
+    /// if let Some(pixel) = ppm.get_mut(20, 20) {
+    ///     *pixel = Rgb::new(0.3, 1.0, 0.6); 
+    /// }
+    /// // Change the red component individually
+    /// ppm.get_mut(20, 20).unwrap().r = 0.4;
+    /// ```
     #[inline]
     pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut Rgb> {
         self.index(x, y).map(move |i| &mut self.pixels[i])
     }
 
     /// Output the image as a PPM file
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// let ppm = Ppm::new(32, 32);
+    /// ppm.save("image.ppm");
+    /// ```
     pub fn save(&self, path: &str) -> io::Result<()> {
         // Create the destination file
         let mut file = File::create(path)?;
