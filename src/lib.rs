@@ -111,7 +111,7 @@ impl<T: Colour> Ppm<T> {
         for y in 0..self.height {
             for x in 0..self.width {
                 let (r, g, b) = self.get(x, y).unwrap().as_bytes();
-                write!(file, "{:3} {:3} {:3}  ", r, g, b)?;
+                write!(file, "{:03} {:03} {:03}  ", r, g, b)?;
             }
             writeln!(file, "")?;
         }
