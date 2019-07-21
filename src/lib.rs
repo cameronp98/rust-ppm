@@ -72,9 +72,9 @@ pub struct Ppm {
     /// The image pixels stored contiguously
     pixels: Vec<Rgb>,
     /// The image width in pixels (or the number of rows)
-    pub width: usize,
+    width: usize,
     /// The image height in pixels (or the number of columns)
-    pub height: usize,
+    height: usize,
 }
 
 impl Ppm {
