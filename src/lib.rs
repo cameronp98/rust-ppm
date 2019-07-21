@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io;
 use std::io::Write;
 
-const RGB_MAX: u8 = 255;
+pub const RGB_MAX: u8 = 255;
 
 /// Rgb
 #[derive(Debug, Clone)]
