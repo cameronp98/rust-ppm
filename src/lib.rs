@@ -60,6 +60,7 @@ impl Rgb {
 /// 
 /// ```
 /// use ppm::{Ppm, Rgb};
+/// 
 /// // Create a blank 32x32 image
 /// let mut img = Ppm::new(32, 32);
 /// // Change a pixel
@@ -83,6 +84,8 @@ impl Ppm {
     /// # Examples
     /// 
     /// ```
+    /// use ppm::Ppm;
+    /// 
     /// let ppm = Ppm::new(32, 32);
     /// ppm.save("image.ppm");
     /// ```
@@ -110,6 +113,8 @@ impl Ppm {
     /// # Examples
     /// 
     /// ```
+    /// use ppm::Ppm;
+    /// 
     /// let ppm = Ppm::new(32, 32);
     /// println!("{:?}", ppm.get(20, 20).unwrap());
     /// ```
@@ -123,13 +128,15 @@ impl Ppm {
     /// # Examples
     /// 
     /// ```
-    /// let ppm = Ppm::new(32, 32);
+    /// use ppm::{Ppm, Rgb};
+    /// 
+    /// let mut ppm = Ppm::new(32, 32);
     /// // Change a whole pixel
     /// if let Some(pixel) = ppm.get_mut(20, 20) {
     ///     *pixel = Rgb::new(0.3, 1.0, 0.6); 
     /// }
     /// // Change the red component individually
-    /// ppm.get_mut(20, 20).unwrap().r = 0.4;
+    /// ppm.get_mut(20, 20).unwrap().r += 0.1;
     /// ```
     #[inline]
     pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut Rgb> {
@@ -141,6 +148,8 @@ impl Ppm {
     /// # Examples
     /// 
     /// ```
+    /// use ppm::Ppm;
+    /// 
     /// let ppm = Ppm::new(32, 32);
     /// ppm.save("image.ppm");
     /// ```
