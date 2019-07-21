@@ -70,8 +70,8 @@ impl Rgb {
 #[derive(Debug, Clone)]
 pub struct Ppm {
     pixels: Vec<Rgb>,
-    width: usize,
-    height: usize,
+    pub width: usize,
+    pub height: usize,
 }
 
 impl Ppm {
