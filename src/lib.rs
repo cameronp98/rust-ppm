@@ -88,7 +88,7 @@ impl Ppm {
 
     /// Convert pixel coordinates into a 1d index
     #[inline]
-    pub fn index(&self, x: usize, y: usize) -> Option<usize> {
+    fn index(&self, x: usize, y: usize) -> Option<usize> {
         if x < self.width && y < self.height {
             return Some(y * self.width + x)
         }
