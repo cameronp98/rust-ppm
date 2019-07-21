@@ -105,7 +105,7 @@ impl Ppm {
         None
     }
 
-    /// Retrieve the pixel at coordinates `(x, y)`
+    /// Retrieve the pixel at coordinates (`x`, `y`)
     /// 
     /// # Examples
     /// 
@@ -118,7 +118,7 @@ impl Ppm {
         self.index(x, y).map(|i| &self.pixels[i])
     }
 
-    /// Retrieve a mutable reference to the pixel at coordinates `(x, y)`
+    /// Retrieve a mutable reference to the pixel at coordinates (`x`, `y`)
     /// 
     /// # Examples
     /// 
