@@ -6,12 +6,27 @@ use std::io::Write;
 pub const RGB_MAX: u8 = 255;
 
 /// Convert RGB `f32` in [0.0, 1.0] to `u8` in [0, 255]
+/// 
+/// # Examples
+/// 
+/// ```
+/// use ppm::{Ppm, Rgb, f32_to_u8};
+/// 
+/// assert_eq!(f32_to_u8(1.0), 255);
+/// ```
 pub fn f32_to_u8(f: f32) -> u8 {
     assert!(f <= 1.0);
     (f * RGB_MAX as f32) as u8
 }
 
 /// Convert RGB `u8` in [0, 255] to `f32` in [0.0, 1.0]
+/// 
+/// # Examples
+/// 
+/// ```
+/// use ppm::u8_to_f32;
+/// assert_eq!(u8_to_f32(255), 1.0);
+/// ```
 pub fn u8_to_f32(u: u8) -> f32 {
     u as f32 / RGB_MAX as f32
 }
@@ -68,7 +83,6 @@ impl Rgb {
 /// *img.get_mut(5, 7).unwrap() = Rgb::new(1.0, 1.0, 1.0);
 /// // Save the image
 /// img.save("image.ppm").unwrap();
-/// 
 #[derive(Debug, Clone)]
 pub struct Ppm {
     /// The image pixels stored contiguously
@@ -117,7 +131,7 @@ impl Ppm {
     /// use ppm::Ppm;
     /// 
     /// let ppm = Ppm::new(32, 32);
-    /// println!("{:?}", ppm.get(20, 20).unwrap());
+    /// assert_eq!(ppm.get(0, 0).unwrap().r, 0.0);
     /// ```
     #[inline]
     pub fn get(&self, x: usize, y: usize) -> Option<&Rgb> {
@@ -133,11 +147,13 @@ impl Ppm {
     /// 
     /// let mut ppm = Ppm::new(32, 32);
     /// // Change a whole pixel
-    /// if let Some(pixel) = ppm.get_mut(20, 20) {
-    ///     *pixel = Rgb::new(0.3, 1.0, 0.6); 
+    /// if let Some(pixel) = ppm.get_mut(0, 0) {
+    ///     *pixel = Rgb::new(0.3, 1.0, 1.0); 
     /// }
     /// // Change the red component individually
-    /// ppm.get_mut(20, 20).unwrap().r += 0.1;
+    /// ppm.get_mut(0, 0).unwrap().r += 0.1;
+    /// 
+    /// assert_eq!(ppm.get(0, 0).unwrap().r, 0.4);
     /// ```
     #[inline]
     pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut Rgb> {
