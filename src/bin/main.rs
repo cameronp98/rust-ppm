@@ -1,7 +1,7 @@
 use ppm::{Ppm, Rgb};
 
 fn main() {
-    let width = 400;
+    let width = 64;
     let height = width;
 
     let mut ppm = Ppm::new(width, height);
