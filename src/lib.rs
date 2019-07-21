@@ -4,17 +4,6 @@ use std::io::Write;
 
 const RGB_MAX: u8 = 255;
 
-pub trait Colour: Clone {
-    /// Returns the colour formatted as RGB bytes
-    fn as_bytes(&self) -> (u8, u8, u8);
-
-    /// Returns the maximum (white) value for this type
-    fn white() -> Self;
-
-    /// Returns the minimum (black) value for this type
-    fn black() -> Self;
-}
-
 /// Rgb
 #[derive(Debug, Clone)]
 pub struct Rgb {
@@ -28,9 +17,7 @@ impl Rgb {
     pub fn new(r: f32, g: f32, b: f32) -> Rgb {
         Rgb { r, g, b }
     }
-}
 
-impl Colour for Rgb {
     fn as_bytes(&self) -> (u8, u8, u8) {
         (
             (self.r * RGB_MAX as f32) as u8,
@@ -39,7 +26,7 @@ impl Colour for Rgb {
         )
     }
 
-    fn white() -> Rgb {
+    pub fn white() -> Rgb {
         Rgb {
             r: 1.0,
             g: 1.0,
@@ -47,7 +34,7 @@ impl Colour for Rgb {
         }
     }
 
-    fn black() -> Rgb {
+    pub fn black() -> Rgb {
         Rgb {
             r: 0.0,
             g: 0.0,
@@ -58,19 +45,19 @@ impl Colour for Rgb {
 
 /// A linear pixel array representing an image of dimensions `width`x`height`
 #[derive(Debug, Clone)]
-pub struct Ppm<T: Colour> {
-    pixels: Vec<T>,
+pub struct Ppm {
+    pixels: Vec<Rgb>,
     width: usize,
     height: usize,
 }
 
-impl<T: Colour> Ppm<T> {
+impl Ppm {
     /// Create a new PPM image with the given output dimensions
-    pub fn new(width: usize, height: usize) -> Ppm<T> {
+    pub fn new(width: usize, height: usize) -> Ppm {
         assert!(width != 0 && height != 0);
 
         Ppm {
-            pixels: vec![T::white(); width * height],
+            pixels: vec![Rgb::black(); width * height],
             width,
             height,
         }
@@ -87,13 +74,13 @@ impl<T: Colour> Ppm<T> {
 
     /// Retrieve the pixel at coordinates `(x, y)`
     #[inline]
-    pub fn get(&self, x: usize, y: usize) -> Option<&T> {
+    pub fn get(&self, x: usize, y: usize) -> Option<&Rgb> {
         self.index(x, y).map(|i| &self.pixels[i])
     }
 
     /// Retrieve a mutable reference to the pixel at coordinates `(x, y)`
     #[inline]
-    pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut T> {
+    pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut Rgb> {
         self.index(x, y).map(move |i| &mut self.pixels[i])
     }
 
