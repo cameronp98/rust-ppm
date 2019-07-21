@@ -96,6 +96,11 @@ pub struct Ppm {
 impl Ppm {
     /// Create a new PPM image with a width and height
     /// 
+    /// # Arguments
+    /// 
+    /// * `width` - The width of the image in pixels
+    /// * `height` - The height of the image in pixels
+    /// 
     /// # Examples
     /// 
     /// ```
@@ -115,6 +120,11 @@ impl Ppm {
     }
 
     /// Convert pixel coordinates into a 1d index
+    /// 
+    /// # Arguments
+    /// 
+    /// * `x` - The x coordinate of the pixel (its column index)
+    /// * `y` - The y coordinate of the pixel (its row index)
     #[inline]
     fn index(&self, x: usize, y: usize) -> Option<usize> {
         if x < self.width && y < self.height {
@@ -124,6 +134,11 @@ impl Ppm {
     }
 
     /// Retrieve the pixel at coordinates (`x`, `y`)
+    /// 
+    /// # Arguments
+    /// 
+    /// * `x` - The x coordinate of the pixel (its column index)
+    /// * `y` - The y coordinate of the pixel (its row index)
     /// 
     /// # Examples
     /// 
@@ -139,6 +154,10 @@ impl Ppm {
     }
 
     /// Retrieve a mutable reference to the pixel at coordinates (`x`, `y`)
+    /// # Arguments
+    /// 
+    /// * `x` - The x coordinate of the pixel (its column index)
+    /// * `y` - The y coordinate of the pixel (its row index)
     /// 
     /// # Examples
     /// 
@@ -161,6 +180,10 @@ impl Ppm {
     }
 
     /// Output the image as a PPM file
+    /// 
+    /// # Arguments
+    /// 
+    /// * `path` - Where to save the image
     /// 
     /// # Examples
     /// 
