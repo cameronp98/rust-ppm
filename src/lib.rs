@@ -183,7 +183,7 @@ impl Ppm {
                 let (r, g, b) = self.get(x, y).unwrap().as_bytes();
                 write!(file, "{:03} {:03} {:03}  ", r, g, b)?;
             }
-            writeln!(file, "")?;
+            writeln!(file)?;
         }
 
         Ok(())
