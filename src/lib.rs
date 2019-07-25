@@ -3,9 +3,9 @@ use std::io;
 use std::io::{Read, Write};
 use std::path::Path;
 
+pub mod colour;
 pub mod error;
 pub mod util;
-pub mod colour;
 
 use error::{PpmError, PpmResult};
 use util::RGB_MAX;
@@ -58,7 +58,7 @@ impl Ppm {
     /// Create a new PPM image with the given pixel values
     pub fn with_pixels(width: usize, height: usize, pixels: Vec<Rgb>) -> PpmResult<Ppm> {
         if width == 0 || height == 0 || width * height < pixels.len() {
-            return Err(PpmError::InvalidDimensions(width, height))
+            return Err(PpmError::InvalidDimensions(width, height));
         }
 
         Ok(Ppm {

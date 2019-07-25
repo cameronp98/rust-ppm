@@ -15,7 +15,11 @@ impl Rgb {
     }
 
     pub fn as_bytes(&self) -> (u8, u8, u8) {
-        (float_to_byte(self.r), float_to_byte(self.g), float_to_byte(self.b))
+        (
+            float_to_byte(self.r),
+            float_to_byte(self.g),
+            float_to_byte(self.b),
+        )
     }
 
     pub fn white() -> Rgb {

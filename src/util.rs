@@ -1,4 +1,4 @@
-use crate::{Rgb, PpmResult, PpmError};
+use crate::{PpmError, PpmResult, Rgb};
 
 /// The maximum value for a single RGB component
 pub const RGB_MAX: u8 = 255;
@@ -26,13 +26,13 @@ pub fn float_to_byte(f: f32) -> u8 {
 /// assert_eq!(byte_to_float(255), 1.0);
 /// ```
 pub fn byte_to_float(u: u8) -> f32 {
-    u as f32 / f32::from(RGB_MAX)
+    f32::from(u) / f32::from(RGB_MAX)
 }
 
 /// Create a `Vec<Pixel>` from its width and height dimensions
 pub fn create_pixels(width: usize, height: usize, colour: Rgb) -> PpmResult<Vec<Rgb>> {
     if width == 0 || height == 0 {
-        return Err(PpmError::InvalidDimensions(width, height))
+        return Err(PpmError::InvalidDimensions(width, height));
     }
 
     Ok(vec![colour; width * height])

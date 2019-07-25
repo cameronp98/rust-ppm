@@ -14,12 +14,10 @@ pub enum PpmError {
 impl fmt::Display for PpmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            PpmError::InvalidDimensions(w, h) => {
-                write!(f, "Invalid image dimensions: {}x{}", w, h)
-            },
+            PpmError::InvalidDimensions(w, h) => write!(f, "Invalid image dimensions: {}x{}", w, h),
             PpmError::NotEnoughPixels(exp, got) => {
                 write!(f, "Expected {} pixels, got {}", exp, got)
-            },
+            }
             PpmError::Io(err) => err.fmt(f),
         }
     }
