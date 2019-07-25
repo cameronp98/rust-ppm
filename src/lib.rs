@@ -4,7 +4,7 @@ use std::io::Write;
 
 mod util;
 
-pub use util::{RGB_MAX, f32_to_u8, u8_to_f32};
+pub use util::{f32_to_u8, u8_to_f32, RGB_MAX};
 
 /// An RGB pixel with values in [0.0, 1.0]
 #[derive(Debug, Clone)]
@@ -21,11 +21,7 @@ impl Rgb {
     }
 
     fn as_bytes(&self) -> (u8, u8, u8) {
-        (
-            f32_to_u8(self.r),
-            f32_to_u8(self.g),
-            f32_to_u8(self.b),
-        )
+        (f32_to_u8(self.r), f32_to_u8(self.g), f32_to_u8(self.b))
     }
 
     pub fn white() -> Rgb {
@@ -46,12 +42,12 @@ impl Rgb {
 }
 
 /// A PPM image encoded as a linear pixel array
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use ppm::{Ppm, Rgb};
-/// 
+///
 /// // Create a blank 32x32 image
 /// let mut img = Ppm::new(32, 32);
 /// // Change a pixel
@@ -70,17 +66,17 @@ pub struct Ppm {
 
 impl Ppm {
     /// Create a new PPM image with a width and height
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `width` - The width of the image in pixels
     /// * `height` - The height of the image in pixels
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use ppm::Ppm;
-    /// 
+    ///
     /// let ppm = Ppm::new(32, 32);
     /// ppm.save("image.ppm");
     /// ```
@@ -95,31 +91,31 @@ impl Ppm {
     }
 
     /// Convert pixel coordinates into a 1d index
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `x` - The x coordinate of the pixel (its column index)
     /// * `y` - The y coordinate of the pixel (its row index)
     #[inline]
     fn index(&self, x: usize, y: usize) -> Option<usize> {
         if x < self.width && y < self.height {
-            return Some(y * self.width + x)
+            return Some(y * self.width + x);
         }
         None
     }
 
     /// Retrieve the pixel at coordinates (`x`, `y`)
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `x` - The x coordinate of the pixel (its column index)
     /// * `y` - The y coordinate of the pixel (its row index)
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use ppm::Ppm;
-    /// 
+    ///
     /// let ppm = Ppm::new(32, 32);
     /// assert_eq!(ppm.get(0, 0).unwrap().r, 0.0);
     /// ```
@@ -130,23 +126,23 @@ impl Ppm {
 
     /// Retrieve a mutable reference to the pixel at coordinates (`x`, `y`)
     /// # Arguments
-    /// 
+    ///
     /// * `x` - The x coordinate of the pixel (its column index)
     /// * `y` - The y coordinate of the pixel (its row index)
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use ppm::{Ppm, Rgb};
-    /// 
+    ///
     /// let mut ppm = Ppm::new(32, 32);
     /// // Change a whole pixel
     /// if let Some(pixel) = ppm.get_mut(0, 0) {
-    ///     *pixel = Rgb::new(0.3, 1.0, 1.0); 
+    ///     *pixel = Rgb::new(0.3, 1.0, 1.0);
     /// }
     /// // Change the red component individually
     /// ppm.get_mut(0, 0).unwrap().r += 0.1;
-    /// 
+    ///
     /// assert_eq!(ppm.get(0, 0).unwrap().r, 0.4);
     /// ```
     #[inline]
@@ -155,16 +151,16 @@ impl Ppm {
     }
 
     /// Output the image as a PPM file
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `path` - Where to save the image
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use ppm::Ppm;
-    /// 
+    ///
     /// let ppm = Ppm::new(32, 32);
     /// ppm.save("image.ppm");
     /// ```
