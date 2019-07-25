@@ -12,7 +12,7 @@ pub const RGB_MAX: u8 = 255;
 /// ```
 pub fn f32_to_u8(f: f32) -> u8 {
     assert!(f <= 1.0);
-    (f * f32:::from(RGB_MAX)) as u8
+    (f * f32::from(RGB_MAX)) as u8
 }
 
 /// Convert RGB `u8` in [0, 255] to `f32` in [0.0, 1.0]
