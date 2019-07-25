@@ -1,45 +1,16 @@
 use std::fs::File;
 use std::io;
-use std::io::Write;
+use std::io::{Read, Write};
+use std::path::Path;
 
-mod util;
+pub mod error;
+pub mod util;
+pub mod colour;
 
-pub use util::{f32_to_u8, u8_to_f32, RGB_MAX};
+use error::{PpmError, PpmResult};
+use util::RGB_MAX;
 
-/// An RGB pixel with values in [0.0, 1.0]
-#[derive(Debug, Clone)]
-pub struct Rgb {
-    pub r: f32,
-    pub g: f32,
-    pub b: f32,
-}
-
-impl Rgb {
-    /// Create a new Rgb colour
-    pub fn new(r: f32, g: f32, b: f32) -> Rgb {
-        Rgb { r, g, b }
-    }
-
-    fn as_bytes(&self) -> (u8, u8, u8) {
-        (f32_to_u8(self.r), f32_to_u8(self.g), f32_to_u8(self.b))
-    }
-
-    pub fn white() -> Rgb {
-        Rgb {
-            r: 1.0,
-            g: 1.0,
-            b: 1.0,
-        }
-    }
-
-    pub fn black() -> Rgb {
-        Rgb {
-            r: 0.0,
-            g: 0.0,
-            b: 0.0,
-        }
-    }
-}
+use colour::Rgb;
 
 /// A PPM image encoded as a linear pixel array
 ///
@@ -80,14 +51,45 @@ impl Ppm {
     /// let ppm = Ppm::new(32, 32);
     /// ppm.save("image.ppm");
     /// ```
-    pub fn new(width: usize, height: usize) -> Ppm {
-        assert!(width != 0 && height != 0);
+    pub fn new(width: usize, height: usize) -> PpmResult<Ppm> {
+        Ppm::with_pixels(width, height, vec![Rgb::black(); width * height])
+    }
 
-        Ppm {
-            pixels: vec![Rgb::black(); width * height],
+    /// Create a new PPM image with the given pixel values
+    pub fn with_pixels(width: usize, height: usize, pixels: Vec<Rgb>) -> PpmResult<Ppm> {
+        if width == 0 || height == 0 || width * height < pixels.len() {
+            return Err(PpmError::InvalidDimensions(width, height))
+        }
+
+        Ok(Ppm {
             width,
             height,
-        }
+            pixels,
+        })
+    }
+
+    /// Read a PPM image from a file
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ppm::Ppm;
+    ///
+    /// let ppm = Ppm::from_file("image.ppm");
+    /// *ppm.get_mut(0, 0).unwrap() = Rgb::black();
+    /// ppm.save();
+    /// ```
+    pub fn from_file<P: AsRef<Path>>(path: P) -> PpmResult<Ppm> {
+        let mut file = File::open(path)?;
+        let mut buf = String::new();
+        file.read_to_string(&mut buf)?;
+
+        let (width, height) = (1, 1);
+        let mut pixels = util::create_pixels(width, height, Rgb::black())?;
+
+        // @TODO: parse and create the image here
+
+        Ppm::with_pixels(width, height, pixels)
     }
 
     /// Convert pixel coordinates into a 1d index
