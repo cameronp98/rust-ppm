@@ -1,30 +1,34 @@
 use std::fmt;
 use std::io;
 
-pub type PpmResult<T> = Result<T, PpmError>;
+pub type ImageResult<T> = Result<T, ImageError>;
 
-/// Errors that may occur while performing operations on a PPM image
+/// Errors that can occur while handling an image
 #[derive(Debug)]
-pub enum PpmError {
-    InvalidDimensions(usize, usize),
-    NotEnoughPixels(usize, usize),
-    Io(io::Error),
+pub enum ImageError {
+    InvalidDimensions(u32, u32),
+    InvalidCoordinates(u32, u32),
+    IoError(io::Error),
+    FormatError(String),
 }
 
-impl fmt::Display for PpmError {
+impl fmt::Display for ImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            PpmError::InvalidDimensions(w, h) => write!(f, "Invalid image dimensions: {}x{}", w, h),
-            PpmError::NotEnoughPixels(exp, got) => {
-                write!(f, "Expected {} pixels, got {}", exp, got)
+            ImageError::InvalidDimensions(w, h) => {
+                write!(f, "Invalid image dimensions: {}x{}", w, h)
             }
-            PpmError::Io(err) => err.fmt(f),
+            ImageError::InvalidCoordinates(x, y) => {
+                write!(f, "Invalid image coordinates: ({}, {})", x, y)
+            }
+            ImageError::IoError(err) => err.fmt(f),
+            ImageError::FormatError(s) => f.write_str(s),
         }
     }
 }
 
-impl From<io::Error> for PpmError {
-    fn from(err: io::Error) -> PpmError {
-        PpmError::Io(err)
+impl From<io::Error> for ImageError {
+    fn from(err: io::Error) -> ImageError {
+        ImageError::IoError(err)
     }
 }
