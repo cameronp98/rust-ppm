@@ -1,5 +1,6 @@
 use std::fmt;
 use std::io;
+use std::num::ParseIntError;
 
 pub type ImageResult<T> = Result<T, ImageError>;
 
@@ -7,9 +8,11 @@ pub type ImageResult<T> = Result<T, ImageError>;
 #[derive(Debug)]
 pub enum ImageError {
     InvalidDimensions(u32, u32),
-    InvalidCoordinates(u32, u32),
-    IoError(io::Error),
+    InvalidLocation(u32, u32),
+    UnexpectedEof,
     FormatError(String),
+    IoError(io::Error),
+    ParseIntError(ParseIntError),
 }
 
 impl fmt::Display for ImageError {
@@ -18,11 +21,13 @@ impl fmt::Display for ImageError {
             ImageError::InvalidDimensions(w, h) => {
                 write!(f, "Invalid image dimensions: {}x{}", w, h)
             }
-            ImageError::InvalidCoordinates(x, y) => {
-                write!(f, "Invalid image coordinates: ({}, {})", x, y)
+            ImageError::InvalidLocation(x, y) => {
+                write!(f, "Invalid pixel location: ({}, {})", x, y)
             }
-            ImageError::IoError(err) => err.fmt(f),
-            ImageError::FormatError(s) => f.write_str(s),
+            ImageError::UnexpectedEof => write!(f, "Unexpected EOF"),
+            ImageError::FormatError(s) => write!(f, "Format error: {}", s),
+            ImageError::IoError(e) => e.fmt(f),
+            ImageError::ParseIntError(e) => e.fmt(f),
         }
     }
 }
@@ -30,5 +35,11 @@ impl fmt::Display for ImageError {
 impl From<io::Error> for ImageError {
     fn from(err: io::Error) -> ImageError {
         ImageError::IoError(err)
+    }
+}
+
+impl From<ParseIntError> for ImageError {
+    fn from(err: ParseIntError) -> ImageError {
+        ImageError::ParseIntError(err)
     }
 }
