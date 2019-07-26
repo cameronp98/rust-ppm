@@ -1,7 +1,10 @@
 # rust-ppm [![Build Status](https://travis-ci.com/cameronp98/rust-ppm.svg?branch=master)](https://travis-ci.com/cameronp98/rust-ppm)
-## Create simple PPM images with rust
+> Rust crate for handling Netpbm images modeled on `image` v0.22.0
 
 To run tests:
 ```$ cargo test```
 
-Currently working on parse functionality
+## Roadmap:
+ * Currently working on parse functionality
+ * Add support for BitMap (P1) and GrayMap (P2)
+
