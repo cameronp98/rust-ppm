@@ -1,0 +1,8 @@
+# cargo
+/target
+
+# rustfmt (backup files)
+**/*.rs.bk
+
+# vscode
+settings.json
